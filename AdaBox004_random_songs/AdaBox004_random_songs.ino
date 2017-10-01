@@ -17,7 +17,7 @@
 
 // These are the pins used
 #define VS1053_RESET   -1     // VS1053 reset pin (not used!)
-// Feather ESP8266 -- using HUZZAH featther
+// Feather ESP8266 -- using HUZZAH feather
 #define VS1053_CS      16     // VS1053 chip select pin (output)
 #define VS1053_DCS     15     // VS1053 Data/command select pin (output)
 #define CARDCS          2     // Card chip select pin
@@ -34,9 +34,9 @@ Adafruit_VS1053_FilePlayer musicPlayer =
   Adafruit_VS1053_FilePlayer(VS1053_RESET, VS1053_CS, VS1053_DCS, VS1053_DREQ, CARDCS);
 
 void setup() {
-//  Serial.begin(115200); // only needed for trouble shooting
-//  while (!Serial) { delay(1); } // Wait for serial port to be opened,
-//  Serial.println("\n\nAdafruit VS1053 Feather Test");
+  Serial.begin(115200); // only needed for trouble shooting
+  while (!Serial) { delay(1); } // Wait for serial port to be opened,
+  Serial.println("\n\nAdafruit VS1053 Feather Test");
   
   randomSeed(ESP.getCycleCount()); // HUZZAH has only 1 analog pin which is already used
                                    // needed different random seed
@@ -54,7 +54,7 @@ void loop() {
 
   // check periodically to adjust volume!
   loopcounter++;
-  if (loopcounter >= 1000) {
+  if (loopcounter >= 500) {
         loopcounter = 0;
         int vol = 0;
         vol = analogRead(VOLUME_KNOB);
@@ -70,11 +70,13 @@ void loop() {
   if (! musicPlayer.playingMusic) { 
     trackNumber = random(6); // have to do this one digit at a time; first digit 0-5
     char c = char(trackNumber + 48);  // ASCII 48 is '0'; need to shift value to get right character
+    Serial.println(c);
     song[6] = c; // replace the tens value in the char array
     trackNumber = random(10); // second digit 0-9
-    c= char(trackNumber + 48);
+    c = char(trackNumber + 48);
+    Serial.println(c);
     song[7] = c;   
-//    Serial.println(song);
+    Serial.println(song);
     musicPlayer.startPlayingFile(song);
     delay(10);
   }
